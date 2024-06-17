@@ -27,7 +27,8 @@ In Flask app, we'll want
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://helloec2rds_user:rmypassword@localhost.db_helloec2rdsipaddress_misc'
 db = SQLAlchemy(app)
 # Cloud formations 
-General guide to stumble through https://medium.com/@amarakulin/aws-practical-guide-ec2-rds-with-cloudformation-93ff2cbcb8e
+Starting with setting up Cloud Formations...which I am figuring out with help from ChatGPT
+
 Create an IAM account, grant it AWSCloudFormationFullAccess (this might be be granular enough to be considered best practice)
 Link Git repo to AWS
 - In AWS...go to Cloud Formations > Create Stack, and select
@@ -49,4 +50,7 @@ Link Git repo to AWS
     - Complete the rest of the  Note: For "Configure stack options", choose defaults  
   - Job will fail, saying that cf-update-stack-git-repo-aws-learning doesn't trust the connection 
   - Complete the above steps one more time, except, for IAM Role, select "Existing IAM role"
-  - Completes successfully. Notice Pull Requst in Git repo "Add AWS Cloudformation Deployment file for cfstackhelloec2rdsipaddress stack #1"
+  - Completes successfully. Notice Pull Requst in Git repo "Add AWS Cloudformation Deployment file for cfstackhelloec2rdsipaddress stack #1".  Merge it.
+  - In Git, git fetch, git merge (or whatever), then add template file cf-template-helloec2rdsipaddress.yaml to the repo, and commit
+
+  Next: set up the template - based on this guide (stumble through it) https://medium.com/@amarakulin/aws-practical-guide-ec2-rds-with-cloudformation-93ff2cbcb8e
