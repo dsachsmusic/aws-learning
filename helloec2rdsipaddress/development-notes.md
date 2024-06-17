@@ -28,3 +28,25 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://helloec2rds_user:rmypassword@lo
 db = SQLAlchemy(app)
 # Cloud formations 
 General guide to stumble through https://medium.com/@amarakulin/aws-practical-guide-ec2-rds-with-cloudformation-93ff2cbcb8e
+Create an IAM account, grant it AWSCloudFormationFullAccess (this might be be granular enough to be considered best practice)
+Link Git repo to AWS
+- In AWS...go to Cloud Formations > Create Stack, and select
+  - Choose an existing template
+  - Sync from Git
+    - Follow steps to set up a connection
+- In AWS, go to go to Cloud Formations > Create Stack, and select
+  - Choose an existing template
+  - Sync from Git
+    - follow the steps prompts...
+    - outcome: in Git, under Integrations > Github Apps, see AWS Connector
+  - Link a git repository
+    - select the connection set up previously
+    - select the repository and branch
+    - Deployment file path: cfstackhelloec2rdsipaddress-deploy.yaml
+    - For IAM Role, select "New IAM role"
+      - Name: cf-update-stack-git-repo-aws-learning
+    - Template file path: cf-template-helloec2rdsipaddress.yaml
+    - Complete the rest of the  Note: For "Configure stack options", choose defaults  
+  - Job will fail, saying that cf-update-stack-git-repo-aws-learning doesn't trust the connection 
+  - Complete the above steps one more time, except, for IAM Role, select "Existing IAM role"
+  - Completes successfully. Notice Pull Requst in Git repo "Add AWS Cloudformation Deployment file for cfstackhelloec2rdsipaddress stack #1"
