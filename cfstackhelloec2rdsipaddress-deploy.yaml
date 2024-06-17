@@ -1,0 +1,3 @@
+template-file-path: cf-template-helloec2rdsipaddress.yaml
+parameters: {}
+tags: {}
