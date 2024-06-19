@@ -53,12 +53,13 @@ Link Git repo to AWS
   - Completes successfully. Notice Pull Requst in Git repo "Add AWS Cloudformation Deployment file for cfstackhelloec2rdsipaddress stack #1".  Merge it.
   - In Git, git fetch, git merge (or whatever), then add template file cf-template-helloec2rdsipaddress.yaml to the repo, and commit
 
-  Next: set up the template - based on this guide (stumble through it) https://medium.com/@amarakulin/aws-practical-guide-ec2-rds-with-cloudformation-93ff2cbcb8e
-  # Side track: Doing it manually
-  Note: I had the thought that I should configure this manually, to fully understand it, before doing it via Cloud Formations
-  ...steps I'm taking:
+Next: set up the template - based on this guide (stumble through it) https://medium.com/@amarakulin/aws-practical-guide-ec2-rds-with-cloudformation-93ff2cbcb8e
 
-  ## Create the VPC 
+# Side track: Doing it manually
+Note: I had the thought that I should configure this manually, to fully understand it, before doing it via Cloud Formations
+...steps I'm taking:
+
+## Create the VPC 
 
 AWS > VPC Dashboard > Create VPC
 Name: helloec2rdsipaddress-vpc-manual
@@ -94,7 +95,7 @@ Add a route to  helloec2rdsipaddress-public-route-table-manual 0.0.0.0/0 for tar
 Create security groups: helloec2rdsipaddress-securitygroup-internal-traffic-manual, helloec2rdsipaddress-securitygroup-public-traffic-manual
 For helloec2rdsipaddress-securitygroup-public-traffic-manual, add inbound rule: TCP traffic from 0.0.0.0/0 on port 8080.
 Assign it to your VPC (VPC resource).
-Add an inbound rule allowing TCP traffic from <whats my ip> on port 8080, another rule for SSH
+Add an inbound rule allowing TCP traffic from ...whats my ip.... on port 8080, another rule for SSH
 For helloec2rdsipaddress-securitygroup-internal-traffic-manual, add inbound rule allowing all traffic from source helloec2rdsipaddress-securitygroup-internal-traffic-manual (all traffic from anything within the security group is allowed to all components that are members of the security group)
 
 ## Create the instance
