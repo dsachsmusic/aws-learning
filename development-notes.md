@@ -46,7 +46,7 @@ Link Git repo to AWS
     - Deployment file path: cfstackhelloec2rdsipaddress-deploy.yaml
     - For IAM Role, select "New IAM role"
       - Name: cf-update-stack-git-repo-aws-learning
-    - Template file path: cf-template-helloec2rdsipaddress.yaml
+    - Template file path: cf-template-  .yaml
     - Complete the rest of the  Note: For "Configure stack options", choose defaults  
   - Job will fail, saying that cf-update-stack-git-repo-aws-learning doesn't trust the connection 
   - Complete the above steps one more time, except, for IAM Role, select "Existing IAM role"
@@ -54,3 +54,59 @@ Link Git repo to AWS
   - In Git, git fetch, git merge (or whatever), then add template file cf-template-helloec2rdsipaddress.yaml to the repo, and commit
 
   Next: set up the template - based on this guide (stumble through it) https://medium.com/@amarakulin/aws-practical-guide-ec2-rds-with-cloudformation-93ff2cbcb8e
+  # Side track: Doing it manually
+  Note: I had the thought that I should configure this manually, to fully understand it, before doing it via Cloud Formations
+  ...steps I'm taking:
+
+  ## Create the VPC 
+
+AWS > VPC Dashboard > Create VPC
+Name: helloec2rdsipaddress-vpc-manual
+IPv4 CIDR block: 10.0.0.0/24
+Click Create.
+
+Internet Gateway (IGW):
+
+AWS > VPC Dashboard > Internet Gateways > Create internet gateway
+Name:  helloec2rdsipaddress-internet-gateway-manual
+Attach Internet Gateway to VPC...
+- Actions > Attach to VPC (select helloec2rdsipaddress-vpc-manual)
+
+Select the newly created IGW.
+Click on Actions > Attach to VPC.
+Select your VPC (VPC resource).
+Subnets:
+
+AWS > VPC Dashboard > Subnets > Create Subnet
+Name: helloec2rdsipaddress-subnet-public-manual
+CIDR block: 10.0.0.0/28
+Choose the VPC (select helloec2rdsipaddress-vpc-manual)
+Enable Auto-assign public IPv4 address (note: for some reason need to override/disable this when creating EC2 instance...looking into that with AWS tech support)
+Repeat the same for helloec2rdsipaddress-subnet-db1-manual/10.0.0.16/28 and helloec2rdsipaddress-subnet-db2-manual/10.0.0.32/28 don't enable auto-assing public ip for these)
+
+Route Tables: helloec2rdsipaddress-public-route-table-manual, helloec2rdsipaddress-db-route-table-manual...
+...subnet associations
+
+Routes for route public table
+...Edit routes > 
+Add a route to  helloec2rdsipaddress-public-route-table-manual 0.0.0.0/0 for target helloec2rdsipaddress-internet-gateway-manual
+
+Create security groups: helloec2rdsipaddress-securitygroup-internal-traffic-manual, helloec2rdsipaddress-securitygroup-public-traffic-manual
+For helloec2rdsipaddress-securitygroup-public-traffic-manual, add inbound rule: TCP traffic from 0.0.0.0/0 on port 8080.
+Assign it to your VPC (VPC resource).
+Add an inbound rule allowing TCP traffic from <whats my ip> on port 8080, another rule for SSH
+For helloec2rdsipaddress-securitygroup-internal-traffic-manual, add inbound rule allowing all traffic from source helloec2rdsipaddress-securitygroup-internal-traffic-manual (all traffic from anything within the security group is allowed to all components that are members of the security group)
+
+## Create the instance
+EC2 > Launch instance 
+Name: helloec2rdsipaddress-webserver-manual
+OS Image: Amazon Linux (free tier eligible)
+Network settings > Edit ...set auto-assign public ip to disabled (because, throws an error, otherwise...talking to customer support)
+Keypair: Create new keypair (rsa, .pem, name: keypair-helloec2rdsipaddress)
+Security group: helloec2rdsipaddress-securitygroup-public-traffic-manual
+Launch instance
+
+Elastic IPs > Allocate Elastic IP Addresses...select all defaults and click "Allocate"
+Elastic IPs > Select newly allocated Elastic IP > Actions > Associate...
+
+EC2 > Instances > select instance that was created > Connect > SSH client...use the command provided (ssh -i "keypair-helloec2rdsipaddress.pem" ec2-user@52.86.14.235)
