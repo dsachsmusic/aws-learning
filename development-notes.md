@@ -115,3 +115,31 @@ Elastic IP
 
 Connect
 - EC2 > Instances > select instance that was created > Connect > SSH client...use the command provided (ssh -i "keypair-helloec2rdsipaddress.pem" ec2-user@52.86.14.235)
+
+## Configure Python and Flask and create hello world app
+
+Dependencies
+- Confirm python is installed by running the command python3 --version
+- Install pip: sudo yum install python3-pip -y
+- Install virutalenv: sudo pip3 install virtualenv
+
+Create a user: sudo adduser flaskapp
+- Create a group (to manage resources that the new user, as well the regular user, should have access to) sudo groupadd flaskapp
+- Grant the group (and the user) ownership over the user home folder sudo chown -R flaskapp:flaskapp /home/flaskapp
+- Add regular user account to the the group (created for "managing resources that the new user, as well as the regular user...")sudo usermod -aG flaskapp ec2-user
+- Tip: If desired, confirm, user added to group, if Confirm with: groups ec2-user
+- Make user folder accessible (grant read and write) to group that was granted ownership over the folder the sudo chmod -R 775 /home/flaskapp
+- Confirm permissions applied ls -ld /home/flaskapp
+  - (should be drwxrwxr-x)
+- Make a directory to hold the application mkdir /home/flaskapp/helloec2rdsipaddress
+- Chmod that directory: sudo chmod -R 775 /home/flaskapp/helloec2rdsipaddress/
+- change the owner group of that directory...to flaskapp:flaskapp: sudo chown -R flaskapp:flaskapp /home/flaskapp
+- Change directory, to /home/flaskapp/helloec2rdsipaddress
+- Create a virtual environment: python -m venv venv
+- Activate the virtual environment: source venv/bin/activate
+- Install flask: pip install flask
+- create an app.py file...with a simple hello world.  For app.run...use app.run(host='IP Address of the host', port=8080, debug=True) 
+- Run python app.py
+- Connect http://publicipaddress:8080 to see "Hello, World"
+
+...Next step will be to set up gunicorn and nginx
