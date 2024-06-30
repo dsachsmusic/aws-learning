@@ -145,7 +145,26 @@ Create a user: sudo adduser flaskapp
 ...Next step will be to set up gunicorn and nginx
 
 
-# Create RDS instance and configure with postgres
+# Create RDS instance
+
+Create the DB Subnet Group
+AWS > RDS > Create DB Subnet Group
+- Select the subnets created for this purpose, etc. 
+Create the RDS instance 
+
+AWS > RDS >  Create database.
+- Choose Standard Create.
+- Select Engine (PostgreSQL in this case).
+- etc. 
+- For security group, select the "internal" one
+- For machine size, etc. Single-AZ db.t2.micro or db.t3.micro instance.
+- Storage...go minimum: 20 GB of storage (SSD)
+- create a first DB called db_hello_misc
+Note: Turn this off regularly...because it is expensive...and, be aware that it automatically turns back on every 7 days
+- RDS > Databases > select the RDS instance > Actions > Stop
+- Should set up a script to stop every 7 days, or just use Aurora
+
+# Configure EC2 instance to talk to Postgress
 
 Install postgres sql client...
 - This is so, later, in case we want to test querying against table from bash (after we create the table with python)
