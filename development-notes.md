@@ -182,7 +182,7 @@ Build a connection string, create a query to create the table
 - Note: To find the hostname and port, AWS >  RDS > "Connectivity & security" tab >  "Endpoint" and "Port"
   - Btw...This endpoint is reachable using AWS' VPC's built in DNS resolution
 
-create a file named create_table.py, and add the following contents
+create and run a file named create_table.py
 ```
 from sqlalchemy import create_engine, text
 engine = (create_engine("postgresql+psycopg2://postgres:mypassword@db-helloec2rdsipaddress.ctcsm8kwqy85.us-east-1.rds.amazonaws.com:5432/db_hello_misc"))
