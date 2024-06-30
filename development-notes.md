@@ -97,7 +97,7 @@ security groups
 - helloec2rdsipaddress-securitygroup-internal-traffic-manual, helloec2rdsipaddress-securitygroup-public-traffic-manual
 - For helloec2rdsipaddress-securitygroup-public-traffic-manual, add inbound rule: TCP traffic from 0.0.0.0/0 on port 8080.
 - Add an inbound rule allowing TCP traffic from ...whats my ip.... on port 8080, another rule for SSH
-- For helloec2rdsipaddress-securitygroup-internal-traffic-manual, add inbound rule allowing all traffic from source helloec2rdsipaddress-securitygroup-internal-traffic-manual (all traffic from anything within the security group is allowed to all components that are members of the security group)
+- For helloec2rdsipaddress-securitygroup-internal-traffic-manual, add inbound rule allowing all traffic from source helloec2rdsipaddress-securitygroup-public-traffic-manual (all traffic from anything within the security group is allowed to all components that are members of the security group)
 
 ## Create the instance
 EC2
