@@ -145,7 +145,7 @@ Create a user: sudo adduser flaskapp
 ...Next step will be to set up gunicorn and nginx
 
 
-# Create RDS instance
+## Create RDS instance
 
 Create the DB Subnet Group
 AWS > RDS > Create DB Subnet Group
@@ -164,7 +164,7 @@ Note: Turn this off regularly...because it is expensive...and, be aware that it 
 - RDS > Databases > select the RDS instance > Actions > Stop
 - Should set up a script to stop every 7 days, or just use Aurora
 
-# Configure EC2 instance to talk to Postgress
+## Configure EC2 instance to talk to Postgress
 
 Install postgres sql client...
 - This is so, later, in case we want to test querying against table from bash (after we create the table with python)
