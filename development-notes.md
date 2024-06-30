@@ -143,3 +143,67 @@ Create a user: sudo adduser flaskapp
 - Connect http://publicipaddress:8080 to see "Hello, World"
 
 ...Next step will be to set up gunicorn and nginx
+
+
+# Create RDS instance and configure with postgres
+
+Install postgres sql client...
+- This is so, later, in case we want to test querying against table from bash (after we create the table with python)
+- run yum list | grep postgres
+  -...find the name of the currently available postgresql and postgresql_libs package (for example, postgresql15.x86_64 and postgresql15-private-libs.x86_64)
+  - sudo yum install said packages
+
+
+Install dependencies within virtual environment...run:
+- pip install psycopg2-binary
+- pip install sqlalchemy
+- note: We use psycopg2-binary to query postgres with sqlalchemy
+
+Build a connection string, create a query to create the table 
+- Note: To find the hostname and port, AWS >  RDS > "Connectivity & security" tab >  "Endpoint" and "Port"
+  - Btw...This endpoint is reachable using AWS' VPC's built in DNS resolution
+
+create a file named create_table.py, and add the following contents
+from sqlalchemy import create_engine, text
+engine = (create_engine("postgresql+psycopg2://postgres:mypassword@db-helloec2rdsipaddress.ctcsm8kwqy85.us-east-1.rds.amazonaws.com:5432/db_hello_misc"))
+create_table_query = '''
+CREATE TABLE tbl_contact_me (
+    contact_me_id SERIAL PRIMARY KEY,
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    message VARCHAR(1500)
+)
+'''
+with engine.begin() as connection:
+    connection.execute(text(create_table_query))
+
+Test connecting to the database from bash:
+- psql -h db-helloec2rdsipaddress.ctcsm8kwqy85.us-east-1.rds.amazonaws.com -U postgres -d db_hello_misc
+- describe the tables:
+  - \dt 
+
+Create and run file called insert_test.py
+```
+from sqlalchemy import create_engine, text
+engine = (create_engine("postgresql+psycopg2://postgres:mypassword@db-helloec2rdsipaddress.ctcsm8kwqy85.us-east-1.rds.amazonaws.com:5432/db_hello_misc"))
+insert_statement = '''
+    INSERT INTO tbl_contact_me (name, email, message)
+    VALUES ('John Doe', 'john@example.com', 'This is a test message.');
+'''
+with engine.begin() as connection:
+    connection.execute(text(insert_statement))
+```
+Create and run a file called select_statement.py
+
+```
+from sqlalchemy import create_engine, text
+engine = (create_engine("postgresql+psycopg2://postgres:mypassword@db-helloec2rdsipaddress.ctcsm8kwqy85.us-east-1.rds.amazonaws.com:5432/db_hello_misc"))
+select_statement = '''
+SELECT * FROM tbl_contact_me
+'''
+with engine.begin() as connection:
+    connection.execute(text(select_statement))
+```	
+
+A lesson learned during this work: don't create a file called select.py when using sqlalchemy (it conflicts with a module in sqlalchemy called select.py)
