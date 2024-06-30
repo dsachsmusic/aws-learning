@@ -197,7 +197,7 @@ CREATE TABLE tbl_contact_me (
 '''
 with engine.begin() as connection:
     connection.execute(text(create_table_query))
-
+```
 Test connecting to the database from bash:
 - psql -h db-helloec2rdsipaddress.ctcsm8kwqy85.us-east-1.rds.amazonaws.com -U postgres -d db_hello_misc
 - describe the tables:
